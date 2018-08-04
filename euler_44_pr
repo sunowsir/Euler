@@ -1,0 +1,60 @@
+/*************************************************************************
+	> File Name: eular_44_practice.cpp
+	> Author: sunowsir
+	> GitHub: github.com/sunowsir
+	> Created Time: 2018年07月28日 星期六 17时47分10秒
+ ************************************************************************/
+
+#include <cmath>
+#include <iostream>
+using namespace std;
+
+#define fun(x) pow(x, 3)
+
+string Half_fold(int num) {
+    //定义左边界:left、右边界:right和中间数:mid;
+    int left, right, mid;
+    //左边界为1，右边界为该数。
+    left = 1;
+    right = num;
+
+    //查找，直到左边界比右边界大为止
+    while (left <= right) {
+        //中间数为左边界加上右边界除以2，
+        //这里利用了位运算，可以节省时间。
+        mid = (left + right) >> 1;
+        //如果本次循环中的中间数的三次方等于带查找的数，
+        //那么查找成功
+        if (fun(mid) == num) {
+            return "Yes";
+        }
+        //如果本次循环中的中间数的三次方大于带查找的数，
+        //说明函数变量在中间数左边。
+        //将右边界赋值为中间数左边的数，
+        //由于条件中已经比较过，中间数并不是函数自变量
+        else if (fun(mid) > num) {
+            right = mid - 1;
+        }
+        //如果本次循环中的中间数的三次方小于带查找的数，
+        //说明自变量在中间数右边。
+        //将左边界赋值为中间数右边的数。
+        //由于条件中已经比较过，中间数并不是函数自变量。
+        else {
+            left = mid + 1;
+        }
+    }
+
+    return "No";
+
+}
+
+int main () {
+
+    int num;
+
+    cin >> num;
+
+    cout << Half_fold(num) << endl;
+
+    return 0;
+}
