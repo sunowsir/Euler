@@ -1,41 +1,48 @@
 /*************************************************************************
-	> File Name: eular_13.cpp
-	> Author: sunowsir
-	> GitHub: github.com/sunowsir
-	> Created Time: 2018年07月24日 星期二 16时23分16秒
- ************************************************************************/
+	* File Name: euler_13.cpp
+	* Author:    sunowsir
+	* GitHub:    github.com/sunowsir
+	* Mail:      sunow.wang@gmail.com
+*************************************************************************/
 
+#include <cstdio>
+#include <string>
 #include <iostream>
-#include <string.h>
 using namespace std;
 
-char num[55];
-int ans[55] = {1, 0};
+int ans[100] = {1, 0};
 
-int main () {
+void adds(string num) {
+    int num_len = num.size();
+    //更新ans的长度ans[0];
+    if (ans[0] < num_len) {
+        ans[0] = num_len;
+    }
 
-    for (int i = 0; i < 100; i++) {
-        //读入
-        cin >> num;
-        int len = strlen(num);
-        //更新ans长度
-        if (ans[0] < len) {
-            ans[0] = len;
+    for (int i = 0; i < num_len; i++) {
+        //字符需减去字符０
+        ans[num_len - i] += num[i] - '0';
+    }
+
+    for (int i = 1; i <= ans[0]; i++) {
+        if (ans[i] < 10) {
+            continue;
         }
-        //做加法
-        for (int j = 0; j < len; j++) {
-            ans[len - j] += (num[j] - '0');
-        }
-        //处理进位
-        for (int j = 1; j <= ans[0]; j++) {
-            if (ans[j] < 10) {
-                continue;
-            }
-            ans[j + 1] += ans[j] / 10;
-            ans[j] %= 10;
-            ans[0] += (j == ans[0]);
-        }
-        
+        ans[i + 1] += ans[i] / 10;
+        ans[i] %= 10;
+        ans[0] += (i == ans[0]);
+    }
+
+    return;
+
+}
+
+int main() {
+
+    string num = "";
+
+    while (cin >> num) {
+        adds(num);
     }
 
     for (int i = ans[0]; i > ans[0] - 10; i--) {

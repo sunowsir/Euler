@@ -1,42 +1,47 @@
 /*************************************************************************
-	> File Name: eular_37.cpp
-	> Author: sunowsir
-	> GitHub: github.com/sunowsir > Created Time: 2018年07月28日 星期六 14时54分03秒
- ************************************************************************/
+    * File Name: euler_37.cpp
+    * Author:    sunowsir
+    * GitHub:    github.com/sunowsir
+    * Mail:      sunow.wang@gmail.com
+*************************************************************************/
 
-#include <iostream>
 #include <cmath>
+#include <cstdio>
+#include <iostream>
+#include <inttypes.h>
 using namespace std;
 
-#define MAX_N 20000000
-#define PRIME_MAX_N 1000000
+#define MAX_N 2000000
 
-int prime[PRIME_MAX_N + 5] = {0};
-int is_prime[MAX_N] = {0};
+bool Is_Prime(int n) {
 
-void Linear_sieve() {
-    for (int i = 2; i < PRIME_MAX_N + 10; i++) {
-        if (!is_prime[i]) {
-            prime[++prime[0]] = i;
-        }
-        for (int j = 1; j <= prime[0] && i * prime[j] <= PRIME_MAX_N; j++) {
-            is_prime[i * prime[j]] = 1;
-            if (i % prime[j] == 0) {
-                break;
-            }
+    //1和0不是素数
+    if (n == 0 || n == 1) {
+        return false;
+    }
+
+    for (int i = 2; i * i <= n; i++) {
+        if (n % i == 0) {
+            return false;
         }
     }
 
-    return;
-
+    return true;
 }
 
-bool judge (int num) {
-    
-    //循环次数是该数的位数减一次
-    for (int i = 1; i <= floor(log10(num)); i++) {
+bool judge(int num) {
+    if (!Is_Prime(num)) {
+        return false;
+    }
+
+    int len = floor(log10(num)) + 1;
+
+    for (int i = 1; i < len; i++) {
         int power = pow(10, i);
-        if (is_prime[num % power] || is_prime[num / power]) {
+        int num1 = num / power;
+        int num2 = num % power;
+
+        if (!Is_Prime(num1) || !Is_Prime(num2)) {
             return false;
         }
     }
@@ -45,39 +50,19 @@ bool judge (int num) {
 
 }
 
-int main () {
+int main() {
 
-    int ans = 0;
+    int64_t ans = 0;
+    int nums = 0;
 
-    //线性筛
-    Linear_sieve();
-    
-    is_prime[1] = 1;
-
-    /*
-    //测试线性筛
-    for (int i = 1; prime[i] < PRIME_MAX_N; i++) {
-        if (i % 5 == 0) {
-            cout << endl;
-        }
-        cout << prime[i] << " ";
-    }
-    cout << endl;
-    */
-
-    //测试judge函数
-    //cout << judge(3797) << endl;
-
-    //从11开始遍历素数
-    for (int i = 5; prime[i] <= PRIME_MAX_N; i++) {
-        //判断是否符合题目要求
-        if (judge(prime[i])) {
-            cout << prime[i] << endl;
-            ans += prime[i];
+    for (int i = 11; i < MAX_N; i++) {
+        if (judge(i)) {
+            nums++;
+            ans += i;
         }
     }
 
-    cout << endl << ans << endl;
+    cout << ans << endl;
 
     return 0;
 }

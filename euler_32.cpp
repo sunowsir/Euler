@@ -1,66 +1,65 @@
 /*************************************************************************
-	> File Name: eular_32.cpp
-	> Author: sunowsir
-	> GitHub: github.com/sunowsir
-	> Created Time: 2018年07月27日 星期五 14时26分41秒
- ************************************************************************/
+    * File Name: euler_32.cpp
+    * Author:    sunowsir
+    * GitHub:    github.com/sunowsir
+    * Mail:      sunow.wang@gmail.com
+*************************************************************************/
 
+#include <cstdio>
+#include <cstring>
 #include <iostream>
-#include <cmath>
+#include <inttypes.h>
 using namespace std;
 
-#define MAX_N 10000
+int bit;
+bool bnum[10];
+bool bans[10000];
 
-int nums[10] = {0};
+bool split(int n) {
 
-int digit(int num) {
-    return floor(log10(num)) + 1;
+    while (n) {
+        bit++;
+        int now_num = n % 10;
+        if (!now_num || bnum[now_num]) {
+            return false;
+        }
+        bnum[now_num] = true;
+        n /= 10;
+    }
+
+    return true;
+
 }
 
-bool get_valid(int x, int *num) {
-    while (x) {
-        if (x % 10 == 0) {
-            return false;
-        }
-        if (num[x % 10] == 1) {
-            return false;
-        }
-        num[x % 10] = 1;
-        x /= 10;
+bool judge(int i, int j) {
+    
+    bit = 0;
+    memset(bnum, false, sizeof(bnum));
+    if (!split(i)) {
+        return false;
+    }
+    if (!split(j)) {
+        return false;
+    }
+    if (!split(i * j)) {
+        return false;
+    }
+    if (bit < 9) {
+        return false;
     }
     return true;
 }
 
-bool judge(int a, int b, int c) {
-    int num[10] = {0};
-    if (!get_valid(a, num)) {
-        return false;
-    }
-    if (!get_valid(b, num)) {
-        return false;
-    }
-    if (!get_valid(c, num)) {
-        return false;
-    }
+int main() {
 
-    return true;
-}
+    int64_t ans = 0;
 
-int valid[MAX_N] = {0};
-
-int main () {
-
-    int ans = 0;
-
-    for (int i = 2; digit(i) + digit(i) + digit(i * i) <= 9; i++) {
-        for (int j = 1; digit(i) + digit(j) + digit(i * j) <= 9; j++) {
-            if (digit(i) + digit(j) + digit(i * j) < 9) {
-                continue;
-            }
-            if (judge(i, j, i * j)) {
-                ans += i * j * (1 - valid[i * j]);
-                valid[i * j] = 1;
-                cout << i << " * " << j << " = " << i * j << endl;
+    memset(bans, false, sizeof(bans));
+    for (int i = 1; i < 10000; i++) {
+        for (int j = 1; j < 10000; j++) {
+            if (judge(i, j) && !bans[i * j]) {
+                bans[i * j] = true;
+                ans += i * j;
             }
         }
     }

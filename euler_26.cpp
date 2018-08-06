@@ -2,54 +2,47 @@
 	> File Name: euler_26.cpp
 	> Author: sunowsir
 	> GitHub: github.com/sunowsir
-	> Created Time: 2018年07月31日 星期二 09时27分30秒
+	> Created Time: 2018年08月01日 星期三 11时48分27秒
  ************************************************************************/
 
 #include <cstdio>
 #include <iostream>
 using namespace std;
 
-int get_len(int d) {
+int get_len(int n) {
     
-    int dnum[1010] = {0};
-
-    int rem, n;
-
+    int num[1005] = {0};
+    int rem, index;
     rem = 1;
-    n = 1;
+    index = 0;
 
-    //余数不为零才可以继续计算
-    //rem如果出现过就可以求出循环节长度
-    while (rem != 0 && dnum[rem] == 0) {
-        //存储第一次rem出现的位置
-        dnum[rem] = n;
-        //计算下一个余数
-        rem = rem * 10 % d;
-        n++;
+    //判断余数是否为０，并且该余数是否第一次出现
+    //如果之前已经出现过，就已经可以求出该分数的循环节。
+    while (rem != 0 && num[rem] == 0) {
+
+        num[rem] = index;
+        rem = rem * 10 % n;
+        index++;
+        
     }
 
-    return n - dnum[rem];
+    return index - num[rem];
 
 }
 
-
-    
 int main () {
 
-    int ans, max_len;
+    int max_id, max_len;
 
-    ans = 0;
-    max_len = -1;
-    
-    for (int i = 1; i < 1000; i++) {
-        int temp = get_len(i);
-        if (max_len < temp) {
-            max_len = temp;
-            ans = i;
+    for (int i = 999; i > 10; i--) {
+        int now_len = get_len(i);
+        if (max_len < now_len) {
+            max_len = now_len;
+            max_id = i;
         }
     }
 
-    cout << ans << endl;
+    cout << max_id << "=>" << max_len << endl;
 
     return 0;
 }

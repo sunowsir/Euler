@@ -1,53 +1,52 @@
 /*************************************************************************
-    * File Name: euler_35.cpp
+    * File Name: euler_41.cpp
     * Author:    sunowsir
     * GitHub:    github.com/sunowsir
     * Mail:      sunow.wang@gmail.com
 *************************************************************************/
 
-#include <cmath>
-#include <cstdio>
 #include <iostream>
+#include <inttypes.h>
 using namespace std;
 
-#define MAX_N 1000000
-
-bool Is_Prime(int num) {
-    for (int i = 2; i * i <= num; i++) {
+bool Is_Prime(int64_t num) {
+    
+    for (int64_t i = 2; i * i <= num; i++) {
         if (num % i == 0) {
             return false;
         }
     }
 
     return true;
+
 }
 
-bool judge(int n) {
-    
-    int len = floor(log10(n)) + 1;
+int num[10] = {0};
 
-    for (int i = 0; i < len; i++) {
-        if (!Is_Prime(n)) {
+bool Is_Pand(int64_t n) {
+    
+    while (n) {
+        
+        int every_num = n % 10;
+
+        if (num[every_num]) {
             return false;
         }
-        n = n / 10 + n % 10 * pow(10, len - 1);
+
+        num[every_num] = 1;
+
+        n /= 10;
     }
 
     return true;
 
 }
 
-int main() {
+int main () {
 
-    int ans = 0;
-
-    for (int i = 2; i < MAX_N; i++) {
-        if (judge(i)) {
-            ans++;
-        }
+    for (int64_t i = 1; i < 9876543210; i++) {
+        
     }
-
-    cout << ans << endl;
 
     return 0;
 }

@@ -1,50 +1,71 @@
 /*************************************************************************
-	> File Name: eular_25.cpp
-	> Author: sunowsir
-	> GitHub: github.com/sunowsir
-	> Created Time: 2018年07月26日 星期四 10时47分33秒
- ************************************************************************/
+    * File Name: euler_25.cpp
+    * Author:    sunowsir
+    * GitHub:    github.com/sunowsir
+    * Mail:      sunow.wang@gmail.com
+*************************************************************************/
 
+#include <cstdio>
 #include <iostream>
-#include <string.h>
-#include <cmath>
 using namespace std;
 
-int main () {
+int f[3][1100];
 
-    int f[3][1005] = {{0, 0}, {1, 1}, {1, 1}};
-    int f_num = 2;
+int fib(int fs) {
 
-    int *f0, *f1, *f2, max_len;
 
-    while (f[f_num % 3][0] < 1000) {
+    int *f0, *f1, *f2, n;
+
+    n = 1;
+    f[0][0] = 1;
+    f[0][1] = 0;
+    f[1][0] = 1;
+    f[1][1] = 1;
+    f[2][0] = 1;
+    f[2][1] = 1;
+
+    while (f[(n + 2) % 3][0] < fs) {
         
-        f_num++;
-        
-        f0 = f[f_num % 3];
-        f1 = f[(f_num - 1) % 3];
-        f2 = f[(f_num - 2) % 3];
+        f0 = f[(n + 2) % 3];
+        f1 = f[n % 3];
+        f2 = f[(n + 1) % 3];
 
-        max_len = max(max(f[0][0], f[1][0]), f[2][0]);
-        f0[0] = max_len;
-        
-        //加法
-        for (int i = 1; i <= max_len; i++) {
+        //f0 = f1 + f2
+        int len = max(f0[0], f1[0]) > f2[0] ? max(f0[0], f1[0]) : f2[0];
+        f0[0] = len;
+
+        for (int i = 1; i <= len; i++) {
             f0[i] = f1[i] + f2[i];
         }
-        //处理进位
-        for (int i = 1; i <= max_len; i++) {
+
+        //carry
+        for (int i = 1; i <= f0[0]; i++) {
+
             if (f0[i] < 10) {
                 continue;
             }
+
             f0[i + 1] += f0[i] / 10;
             f0[i] %= 10;
             f0[0] += (i == f0[0]);
+            
         }
 
+        n++;
+        
     }
 
-    cout << f_num << endl;
+    return (n - 1);
+
+}
+
+int main() {
+
+    int n;
+
+    cin >> n;
+
+    cout << fib(n) << endl;;
 
     return 0;
 }

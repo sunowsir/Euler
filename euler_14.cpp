@@ -1,61 +1,64 @@
 /*************************************************************************
-	> File Name: eular_14.cpp
+	> File Name: euler_14.cpp
 	> Author: sunowsir
 	> GitHub: github.com/sunowsir
-	> Created Time: 2018年07月24日 星期二 15时08分38秒
  ************************************************************************/
 
+#include <cstdio>
 #include <iostream>
 #include <inttypes.h>
 using namespace std;
+
 #define MAX_N 1000000
 
 int keep[MAX_N + 5] = {0};
 
-int64_t Length(int64_t num) {
+int64_t get_len(int64_t num) {
 
     if (num == 1) {
         return 1;
     }
 
+    //先判断num的范围，再判断记忆数组。
+    //否则会段错误
     if (num <= MAX_N && keep[num]) {
         return keep[num];
     }
 
-    int temp;
-
+    int ans;
+    
     if (num & 1) {
-        temp = Length(3 * num + 1) + 1;
-    } else {
-        temp =  Length(num >> 1) + 1;
+        ans = get_len(3 * num + 1) + 1;
+    }
+    else {
+        ans = get_len(num / 2) + 1;
     }
 
     if (num <= MAX_N) {
-        keep[num] = temp;
+        keep[num] = ans;
     }
 
-    return temp;
+    return ans;
 
 }
 
 int main() {
 
-    int64_t last, last_ip;
+    int64_t max_len, max_ip;
 
-    last = 0;
-    last_ip = 0;
+    keep[1] = 1;
+    max_len = -1;
+    max_ip = 0;
 
-    for (int i = 1; i < MAX_N; i++) {
-        
-        int64_t length = Length(i);
-
-        if (length > last) {
-            last_ip = i;
-            last = length;
+    for (int64_t i = 1; i < MAX_N; i++) {
+        int len = get_len(i);
+        if (len > max_len) {
+            max_ip = i;
+            max_len = len;
         }
     }
 
-    cout << last_ip << ":"  << last << endl;
+    cout << max_ip << " => " << max_len << endl;
 
     return 0;
 }

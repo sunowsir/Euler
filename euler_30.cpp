@@ -1,28 +1,27 @@
 /*************************************************************************
-	> File Name: eular_30.cpp
-	> Author: 
-	> Mail: 
-	> Created Time: 2018年06月30日 星期六 08时12分38秒
+	> File Name: euler_30.cpp
+	> Author: sunowsir
+	> GitHub: github.com/sunowsir
+	> Created Time: 2018年07月31日 星期二 15时15分06秒
  ************************************************************************/
 
-#include <iostream>
 #include <cmath>
+#include <iostream>
 using namespace std;
 
-const int maxn = 354294; //9^5 * 6
+#define MAX_N 531442
 
-int Split_Sum(int num) {
-
-    int sum, n;
-    sum = 0;
-    n = num;
+bool judge(int i) {
+    int num, sum_num;
+    num = i;
+    sum_num = 0;
 
     while (num) {
-        sum += pow(num % 10, 5);
+        sum_num += pow(num % 10, 5);
         num /= 10;
     }
 
-    return sum == n;
+    return sum_num == i;
 
 }
 
@@ -30,8 +29,8 @@ int main () {
 
     int ans = 0;
 
-    for (int i = 2; i <= maxn; i++) {
-        if (Split_Sum(i)) {
+    for (int i = 2; i <= MAX_N; i++) {
+        if (judge(i)) {
             ans += i;
         }
     }

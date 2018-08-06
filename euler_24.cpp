@@ -1,58 +1,77 @@
 /*************************************************************************
-	> File Name: eular_24.cpp
-	> Author: sunowsir
-	> GitHub: github.com/sunowsir
-	> Created Time: 2018年07月29日 星期日 17时52分43秒
- ************************************************************************/
+    * File Name: euler_24.cpp
+    * Author:    sunowsir
+    * GitHub:    github.com/sunowsir
+    * Mail:      sunow.wang@gmail.com
+*************************************************************************/
 
 #include <cstdio>
 #include <iostream>
 using namespace std;
 
-int factorial[10] = {0};
-int nums[10] = {0};
+int fac[10] = {0};
+int num[10] = {0};
 
-void init() {
-
-    factorial[0] = nums[0] = 1;
+void Get_Fac_Init() {
+   
+    fac[0] = 1;
+    num[0] = 0;
 
     for (int i = 1; i < 10; i++) {
-        factorial[i] = i * factorial[i - 1];
-        nums[i] = 1;
+        num[i] = 0;
+        fac[i] = i * fac[i - 1];
     }
+
+    return ;
+
 }
 
-int jump_num(int n, int k) {
-    int index, i;
+int Get_Num(int loc, int sta) {
+   
+    int i, index;
 
-    index = (k / factorial[n]) + 1;
     i = -1;
 
-    while (index > 0) {
+    //get the location of number where the current location should be placed.
+    index = (sta / fac[loc]) + 1;
+
+    while (index) {
         i++;
-        index -= nums[i];
+
+        //datermine if the current number i is available.
+        if (!num[i]) {
+            index--;
+        }
     }
 
-    nums[i] = 0;
+    num[i] = 1;
 
     return i;
-
+    
 }
 
 int main() {
 
+    //call initialization function.
+    Get_Fac_Init();
+
     int n, k;
 
     cin >> n >> k;
-    init();
+
     k--;
 
     for (int i = n - 1; i >= 0; i--) {
-        int num = jump_num(i, k);
-        cout << num;
-        k %= factorial[i];
-    }
 
+        //get number that should be placed in the current location;
+        int num = Get_Num(i, k);
+        
+        cout << num;
+
+        //find the remainder of k divided by the factorial of i,
+        //and find the number of states remaining.
+        k %= fac[i];
+    }
     cout << endl;
 
     return 0;

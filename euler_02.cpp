@@ -1,24 +1,31 @@
 /*************************************************************************
-	> File Name: euler_28.cpp
+	> File Name: euler_02.cpp
 	> Author: sunowsir
 	> GitHub: github.com/sunowsir
-	> Created Time: 2018年07月31日 星期二 15时08分38秒
+	> Created Time: 2018年07月31日 星期二 14时17分14秒
  ************************************************************************/
 
 #include <cstdio>
 #include <iostream>
 using namespace std;
 
+#define MAX_N  4000000
+
 int main () {
 
-    int ans = 1;
+    int a, b, ans;
 
-    for (int i = 3; i <= 1001; i += 2) {
-        int a = i * i;
-        int b = a - (i - 1);
-        int c = b - (i - 1);
-        int d = c - (i - 1);
-        ans = ans + a + b + c + d;
+    a = 0;
+    b = 1;
+    ans = 0;
+
+    while (a + b <= MAX_N) {
+        int temp = a;
+        a = b;
+        b = temp + b;
+        if (b % 2 == 0) {
+            ans += b;
+        }
     }
 
     cout << ans << endl;

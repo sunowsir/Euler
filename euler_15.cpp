@@ -1,37 +1,34 @@
 /*************************************************************************
-	> File Name: eular_15.cpp
-	> Author: sunowsir
-	> GitHub: github.com/sunowsir
-	> Created Time: 2018年07月29日 星期日 12时07分18秒
- ************************************************************************/
+    * File Name: euler_15.cpp
+    * Author:    sunowsir
+    * GitHub:    github.com/sunowsir
+    * Mail:      sunow.wang@gmail.com
+*************************************************************************/
 
 #include <iostream>
 #include <inttypes.h>
 using namespace std;
 
-int64_t gcd(int64_t a, int64_t b) {
-    if (b == 0) {
-        return a;
-    }
-    return gcd(b, a % b);
+int64_t gcd (int a, int b) {
+    return b ? gcd(b, a % b) : a;
 }
 
-int main () {
+int main() {
 
-    int64_t m, n;
-
-    m = 1;
-    n = 1;
+    int64_t a, b;
+    a = 1;
+    b = 1;
     
-    for (int64_t i = 21; i <= 40; i++) {
-        m *= (i - 20);
-        n *= i;
-        int64_t temp = gcd(m, n);
-        m /= temp;
-        n /= temp;
+    for (int i = 21; i <= 40; i++) {
+        a *= i - 20;
+        b *= i;
+        int64_t temp = gcd(a, b);
+        a /= temp;
+        b /= temp;
     }
 
-    cout << n / m << endl;
+    cout << b / a << endl;
 
     return 0;
+
 }

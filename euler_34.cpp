@@ -1,61 +1,50 @@
 /*************************************************************************
-	> File Name: eular_34.cpp
+	> File Name: euler_34.cpp
 	> Author: sunowsir
 	> GitHub: github.com/sunowsir
-	> Created Time: 2018年07月01日 星期日 14时14分38秒
+	> Created Time: 2018年07月31日 星期二 15时20分21秒
  ************************************************************************/
 
+#include <cstdio>
 #include <iostream>
-#include <cmath>
+#include <inttypes.h>
 using namespace std;
 
-const int maxn = 2177280;
+#define MAX_N 21772800
+
+int fac[10] = {0};
+
+bool judge(int64_t i) {
+    int64_t num, fsum;
+    num = i;
+    fsum = 0;
+
+    while (i) {
+        fsum += fac[i % 10];
+        i /= 10;
+    }
+
+    return fsum == num;
+
+}
 
 int main () {
 
-    int factorial[10];
-    int ans;
-    
-    ans = 0;
+    int64_t ans = 0;
 
-    //1--9的阶乘打表；
-    for (int i = 1; i < 10; i++) {
-        factorial[0] = i;
-        factorial[i] = 1;
-        while (factorial[0]) {
-            factorial[i] *= factorial[0];
-            factorial[0]--;
-        }
+    fac[0] = 1;
+    fac[1] = 1;
+
+    for (int i = 2; i < 10; i++) {
+        fac[i] = fac[i - 1] * i;
     }
 
-    factorial[0] = 1;
-
-    for (int i = 10; i <= maxn; i++) {
-        int num = i;
-        int sum = 0;
-        while (num) {
-            int temp = num % 10;
-            num /= 10;
-            sum += factorial[temp];
-        }
-        if (sum == i) {
+    for (int i = 10; i <= MAX_N; i++) {
+        if (judge(i)) {
             ans += i;
         }
     }
 
-/*
-    int x;
-    cin >> x;
-    cout << "factorial[9] * n = " << factorial[9] * x << endl;
-    cout << "10 ^ n = " << pow(10, x) << endl;
-    if (factorial[9] * x > pow(10, x)) {
-        cout << "g(n) > f(n)" << endl;
-    }
-    else {
-        cout << "g(n) < f(n)" << endl;
-    }
-    cout << "9! = " << factorial[9] << endl;
-*/
     cout << ans << endl;
 
     return 0;

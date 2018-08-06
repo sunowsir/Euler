@@ -1,38 +1,42 @@
 /*************************************************************************
-	> File Name: eular_45.cpp
-	> Author: sunowsir
-	> GitHub: github.com/sunowsir
-	> Created Time: 2018年07月28日 星期六 19时57分49秒
- ************************************************************************/
+    * File Name: euler_45.cpp
+    * Author:    sunowsir
+    * GitHub:    github.com/sunowsir
+    * Mail:      sunow.wang@gmail.com
+*************************************************************************/
 
+#include <cstdio>
 #include <iostream>
 #include <inttypes.h>
 using namespace std;
 
-int64_t Pentagonal (int64_t n) {
-    return n * (3 * n - 1) / 2;
+int64_t tnum(int64_t n) {
+    return n * (n + 1) >> 1;
 }
 
-int64_t Hexagonal (int64_t n) {
+int64_t pnum(int64_t n) {
+    return n * (3 * n - 1) >> 1;
+}
+
+int64_t hnum(int64_t n) {
     return n * (2 * n - 1);
 }
 
-bool Half_fold (int64_t (* num)(int64_t), int64_t len, int64_t search_num) {
+bool search(int64_t (* nums)(int64_t), int64_t snum, int64_t len) {
+    int l, r;
+    l = 0;
+    r = len;
 
-    int64_t left, right, mid;
-    left = 1;
-    right = len;
-
-    while (left <= right) {
-        mid = (left + right) >> 1;
-        if (num(mid) == search_num) {
+    while (l <= r) {
+        int mid = (l + r) >> 1;
+        if (nums(mid) == snum) {
             return true;
         }
-        else if (num(mid) > search_num) {
-            right = mid - 1;
+        else if (nums(mid) > snum) {
+            r = mid - 1;
         }
         else {
-            left = mid + 1;
+            l = mid + 1;
         }
     }
 
@@ -40,15 +44,16 @@ bool Half_fold (int64_t (* num)(int64_t), int64_t len, int64_t search_num) {
 
 }
 
-int main () {
+int main() {
 
     int64_t ans = 144;
-
-    while (Half_fold(Pentagonal, 2 * ans, Hexagonal(ans)) == 0) {
+    
+    //根据推导规律，五边形数一定是三角形数，所以不能查找某个三角形数是否是五边形数
+    while (!search(pnum, hnum(ans), ans * 2) || !search(tnum, hnum(ans), ans * 2)) {
         ++ans;
     }
 
-    cout << Hexagonal(ans) << endl;
+    cout << hnum(ans) << endl;
 
     return 0;
 }
