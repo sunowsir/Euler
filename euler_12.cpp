@@ -7,35 +7,31 @@
 
 #include <cstdio>
 #include <iostream>
-#include <inttypes.h>
 using namespace std;
 
-#define MAX_N 2000000
+#define MAX_N 200000
 
 int prime[MAX_N + 5] = {0};
-int tnum[MAX_N + 5] = {0};
-int dnum[MAX_N + 5] = {0};
+int pnum[MAX_N + 5] = {0};
+int fnum[MAX_N + 5] = {0};
 
-void gtnum() {
-
-    for (int i = 2; i * 2 < MAX_N; i++) {
+void Get_Fnum() {
+    
+    for (int i = 2; i < MAX_N; i++) {
         if (!prime[i]) {
             prime[++prime[0]] = i;
-            dnum[i] = 1;
-            tnum[i] = 2;
+            pnum[i] = 1;
+            fnum[i] = 2;
         }
         for (int j = 1; j <= prime[0] && i * prime[j] < MAX_N; j++) {
-            prime[i * prime[j]] = 1;
+            prime[i * prime[j]] = i;
             if (i % prime[j] == 0) {
-                //i * prime[j]的最小素因子比i多了一个
-                dnum[i * prime[j]] = dnum[i] + 1;
-                tnum[i * prime[j]] = tnum[i] / (dnum[i] + 1) * (dnum[i] + 2);
+                pnum[i * prime[j]] = pnum[i] + 1;
+                fnum[i * prime[j]] = fnum[i] / (pnum[i] + 1) * (pnum[i] + 2);
                 break;
-            }
-            else {
-                //prime[j]成为i * prime[j]的最小素因子
-                dnum[i * prime[j]] = 1;
-                tnum[i * prime[j]] = tnum[i] * tnum[prime[j]];
+            } else {
+                pnum[i * prime[j]] = 1;
+                fnum[i * prime[j]] = fnum[i] * fnum[prime[j]];
             }
         }
     }
@@ -44,22 +40,30 @@ void gtnum() {
 
 }
 
-int get_num(int n) {
-    if (n % 2 != 0) {
-        return tnum[n] * tnum[(n + 1) / 2];
+int Get_Tri(int n){
+    
+    if (n % 2 == 0) {
+        return fnum[n / 2] * fnum[n - 1];
+    } else {
+        return fnum[n] * fnum[(n - 1) / 2];
     }
-    return tnum[n / 2] * tnum[n + 1];
+
 }
 
 int main() {
 
-    gtnum();
+    Get_Fnum();
 
-    int n = 1;
-    while (get_num(n) < 500) ++n;
+    int i = 29;
 
-    cout << n * (n + 1) / 2 << endl;
+    while (Get_Tri(i) < 500) {
+        i++;
+    }
 
+    //the formula for number of triangles is : T(n) = n * (n - 1) / 2;
+    //the variable i in the above loop is n in the formula. 
+    //however, the title requires the number of triangles.
+    cout << i * (i - 1) / 2 << endl;
 
-    return 0;
+    return 0;    
 }
